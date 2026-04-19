@@ -1,0 +1,1 @@
+ERR_QBT_0: no of qubit
