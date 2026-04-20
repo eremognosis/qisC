@@ -9,4 +9,6 @@ include_directories(include/core)
 add_executable(qisC
         include/core/error.h
         include/core/qubit.h
-        src/core/qubit.c)
+        src/core/qubit.c
+        include/core/tensor.h
+        src/core/tensor.c)
