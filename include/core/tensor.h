@@ -8,11 +8,6 @@
 
 
 
-typedef struct {
-    double complex data[2][2];
-} Gate2x2;
-
-
 int tensor_kronecker(const double complex *A, size_t rA, size_t cA,
                             const double complex *B, size_t rB, size_t cB,
                             double complex **out_C);
