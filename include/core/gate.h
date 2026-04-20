@@ -7,6 +7,9 @@
 #include <complex.h>
 #include <stddef.h>
 #include "core/qubit.h"
+#include <stdbool.h>
+
+
 typedef struct {
     int n;
     size_t dim; /// 2**n but just redundancy soi that a osychic aint eqquired to underfstand
@@ -19,6 +22,6 @@ Gate *createGate(int n); //// oresents to I
 void destroyGate(Gate *gate);
 int setGate(Gate *gate, double complex *data);
 int applygate(const Gate *gate, circuitt *circuit, const int *target_qubits); /// wtf
-
-
+bool checkunitary(const Gate *gate, double epsilon);
+int makeunitary(Gate *gate);
 #endif //QISC_GATE_H

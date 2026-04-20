@@ -1,6 +1,7 @@
 #include "core/tensor.h"
 #include "core/error.h"
 #include <complex.h>
+#include <math.h>
 #include <stdlib.h>
 
 
@@ -131,5 +132,4 @@ void tensor_normalize(circuitt *circuit) {
     }
 
 }
-
 
