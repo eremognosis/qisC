@@ -54,4 +54,8 @@ Gate *CREATE_ZZ(void);
 Gate *CREATE_TOFFOLI(void);      // CCNOT (Universal for classical logic)
 Gate *CREATE_FREDKIN(void);      // Controlled-SWAP
 
+
+
+
+
 #endif //QISC_GATELIB_H

@@ -18,7 +18,11 @@ set(QISC_PUBLIC_HEADERS
         include/core/gate.h
         include/core/tensor.h
         include/gates/gatelib.h
-        include/algos/grover.h)
+        include/algos/grover.h
+        include/algos/classred.h
+        include/algos/fourier.h
+        include/algos/phaseest.h
+        src/algos/fourier.c)
 
 set(QISC_SOURCES
         src/core/error.c
@@ -26,7 +30,11 @@ set(QISC_SOURCES
         src/core/gate.c
         src/core/tensor.c
         src/gates/gatelib.c
-        src/algos/grover.c)
+        src/algos/grover.c
+        include/algos/classred.h
+        include/algos/fourier.h
+        include/algos/phaseest.h
+        src/algos/fourier.c)
 
 find_library(QISC_MATH_LIBRARY m)
 
@@ -48,7 +56,11 @@ set(QISC_LIBRARY_TARGETS)
 set(QISC_DEFAULT_LINK_TARGET)
 
 if (QISC_BUILD_SHARED)
-    add_library(qisC SHARED ${QISC_SOURCES} ${QISC_PUBLIC_HEADERS})
+    add_library(qisC SHARED ${QISC_SOURCES} ${QISC_PUBLIC_HEADERS}
+            include/algos/classred.h
+            include/algos/fourier.h
+            include/algos/phaseest.h
+            src/algos/fourier.c)
     qisc_configure_library(qisC)
     set_target_properties(qisC PROPERTIES
             VERSION ${PROJECT_VERSION}
@@ -58,7 +70,11 @@ if (QISC_BUILD_SHARED)
 endif ()
 
 if (QISC_BUILD_STATIC)
-    add_library(qisC_static STATIC ${QISC_SOURCES} ${QISC_PUBLIC_HEADERS})
+    add_library(qisC_static STATIC ${QISC_SOURCES} ${QISC_PUBLIC_HEADERS}
+            include/algos/classred.h
+            include/algos/fourier.h
+            include/algos/phaseest.h
+            src/algos/fourier.c)
     qisc_configure_library(qisC_static)
     list(APPEND QISC_LIBRARY_TARGETS qisC_static)
     if (NOT QISC_DEFAULT_LINK_TARGET)
@@ -71,7 +87,11 @@ if (NOT QISC_DEFAULT_LINK_TARGET)
 endif ()
 
 if (QISC_BUILD_CLI)
-    add_executable(qisc_cli src/cli/qisc_cli.c)
+    add_executable(qisc_cli src/cli/qisc_cli.c
+            include/algos/classred.h
+            include/algos/fourier.h
+            include/algos/phaseest.h
+            src/algos/fourier.c)
     target_link_libraries(qisc_cli PRIVATE ${QISC_DEFAULT_LINK_TARGET})
     set_target_properties(qisc_cli PROPERTIES OUTPUT_NAME qisc)
 endif ()

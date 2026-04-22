@@ -81,6 +81,23 @@ static void remove_previous_columns(const double complex *unitary, size_t dim,
     }
 }
 
+static void transpose(double complex *mat, size_t dim) {
+    /// a matrix of size dim * dim flattened
+    if (dim<2) {
+        return;
+    }
+    for (size_t i = 0; i < dim; i++) {
+        for (size_t j = i + 1; j < dim; j++) {
+            size_t idx1 = i * dim + j;
+            size_t idx2 = j * dim + i;
+
+            double complex temp = mat[idx1];
+            mat[idx1] = mat[idx2];
+            mat[idx2] = temp;
+        }
+    }
+}
+
 Gate *createGate(int n) {
     if (n == 0) {
         setlasterror("ERRGT001: GATE WITH 0 DIMENSION");
@@ -408,3 +425,32 @@ int makeunitary(Gate *gate) {
 
     return 0;
 }
+
+Gate *gatedagger(Gate *gate) {
+    if (!gate) {
+        setlasterror("ERRGT004: NULL GATE DATA");
+        return NULL;
+    }
+    if (!gate->data) {
+        setlasterror("ERRGT005: NULL GATE DATA");
+        return NULL;
+    }
+    int n = gate->n;
+    size_t dim = gate->dim;
+    Gate *newgate= createGate(n);
+    if (!newgate) {
+        setlasterror("ERRGT0023: GATE ALLOCATION FAILED");
+        return NULL;
+    }
+
+    setGate(newgate, gate->data);
+
+    for (size_t i = 0; i < dim*dim; i++) {
+        newgate->data[i] = conj(newgate->data[i]);
+    }
+
+    transpose(newgate->data, newgate->dim);
+
+    return newgate;
+}
+

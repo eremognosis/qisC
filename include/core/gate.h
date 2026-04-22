@@ -24,4 +24,6 @@ int setGate(Gate *gate, double complex *data);
 int applygate(const Gate *gate, circuitt *circuit, const int *target_qubits); /// wtf
 bool checkunitary(const Gate *gate, double epsilon);
 int makeunitary(Gate *gate);
+Gate *gatedagger(Gate *gate);
+
 #endif //QISC_GATE_H
