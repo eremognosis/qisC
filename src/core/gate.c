@@ -130,7 +130,8 @@ void destroyGate(Gate *gate) {
     free(gate);
 }
 
-int setGate(Gate *gate, double complex *data) {
+static int set_gate_data_impl(Gate *gate, const double complex *data,
+                              bool require_unitary) {
     if (!gate) {
         setlasterror("ERRGT004: NULL GATE");
         return -1;
@@ -148,13 +149,15 @@ int setGate(Gate *gate, double complex *data) {
         return -1;
     }
 
-    /// we create a ghost matrix actually to see if shit works
-    Gate ghost_gate = *gate;
-    ghost_gate.data = data;
+    if (require_unitary) {
+        /// we create a ghost matrix actually to see if shit works
+        Gate ghost_gate = *gate;
+        ghost_gate.data = (double complex *)data;
 
-    if (!checkunitary(&ghost_gate, GATE_UNITARY_EPSILON)) {
-        setlasterror("ERRGT021: GATE IS NOT UNITARY");
-        return -1; /////// original gate remains untouched and safe.
+        if (!checkunitary(&ghost_gate, GATE_UNITARY_EPSILON)) {
+            setlasterror("ERRGT021: GATE IS NOT UNITARY");
+            return -1; /////// original gate remains untouched and safe.
+        }
     }
 
     ///// that we know the probability (and other things) are not leaking we actually commit to memory (well we have to commit some things to memory)
@@ -168,6 +171,14 @@ int setGate(Gate *gate, double complex *data) {
 
     memcpy(gate->data, data, matrix_len * sizeof(double complex));
     return 0;
+}
+
+int setGate(Gate *gate, const double complex *data) {
+    return set_gate_data_impl(gate, data, true);
+}
+
+int setGateTrusted(Gate *gate, const double complex *data) {
+    return set_gate_data_impl(gate, data, false);
 }
 
 int applygate(const Gate *gate, circuitt *circuit, const int *target_qubits) {
@@ -443,7 +454,10 @@ Gate *gatedagger(Gate *gate) {
         return NULL;
     }
 
-    setGate(newgate, gate->data);
+    if (setGateTrusted(newgate, gate->data) != 0) {
+        destroyGate(newgate);
+        return NULL;
+    }
 
     for (size_t i = 0; i < dim*dim; i++) {
         newgate->data[i] = conj(newgate->data[i]);
@@ -453,4 +467,3 @@ Gate *gatedagger(Gate *gate) {
 
     return newgate;
 }
-

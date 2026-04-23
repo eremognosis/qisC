@@ -12,13 +12,13 @@ static double complex phase(double angle) {
     return cos(angle) + I * sin(angle);
 }
 
-static Gate *create_from_data(const int n, double complex *data) {
+static Gate *create_from_data(const int n, const double complex *data) {
     Gate *gate = createGate(n);
     if (!gate) {
         return NULL;
     }
 
-    if (setGate(gate, data) != 0) {
+    if (setGateTrusted(gate, data) != 0) {
         destroyGate(gate);
         return NULL;
     }
