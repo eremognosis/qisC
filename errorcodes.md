@@ -75,13 +75,12 @@ I wish there existed some auto doc maker in my flavour
 | `ERRGRV005` | `NULL ORACLE` | Oracle callback is `NULL`. | Pass a valid `grover_mark_fn`. |
 | `ERRGRV006` | `ORACLE MARKED NO STATES` | Oracle did not mark any basis state. | Fix the oracle or target state. |
 | `ERRGRV007` | `NON-FINITE STATE AMPLITUDE` | State validation found `NaN` or infinity. | Check previous operations and input state. |
-| `ERRGRV008` | `TARGET MEMORY ALLOCATION FAILED` | Could not allocate internal target-qubit array. | Reduce qubit count or free memory. |
+| `ERRGRV008` | `TARGET MEMORY ALLOCATION FAILED` | Could not allocate internal oracle marked-state cache. | Reduce qubit count or free memory. |
 | `ERRGRV009` | `INVALID QUBIT COUNT` | `groverrecit()` received an invalid qubit count. | Pass a positive qubit count that fits in `size_t` shifts. |
 | `ERRGRV010` | `INVALID MARKED STATE COUNT` | Marked count is zero or larger than the search space. | Pass `1 <= marked_count <= 2^n`. |
 | `ERRGRV011` | `RECOMMENDED ITERATION COUNT TOO LARGE` | Estimated Grover iteration count exceeds `INT_MAX`. | Use a smaller problem or choose iterations manually. |
 | `ERRGRV012` | `MARKED STATE OUT OF RANGE` | `grover_search()` marked state is greater than/equal to `circuit->dim`. | Use a basis state in `[0, circuit->dim - 1]`. |
 | `ERRGRV013` | `NULL OUTPUT STATE` | `grovermlstate()` received `NULL` for `out_state`. | Pass a valid `size_t *`. |
-| `ERRGRV014` | `GROVER GATE MATRIX TOO LARGE` | Dense full-circuit Grover gate matrix would overflow allocation-size calculations. | Use fewer qubits. |
 
 ## Notes For Maintainers(Me)
 -- no notes im good

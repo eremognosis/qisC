@@ -20,7 +20,7 @@ void applyQFT(circuitt* circuit, int *target, int nq) {
     if (!target) { setlasterror("ERRFRR003: NULL target"); return; }
     if (nq > circuit->n) { setlasterror("ERRFR004: target more than SIZE"); return; }
 
-    const Gate *hada = CREATE_HADAMARD();
+    Gate *hada = CREATE_HADAMARD();
 
     for (int i = 0; i < nq; i++) {
         //  Hadamard to the current qubit
@@ -35,7 +35,7 @@ void applyQFT(circuitt* circuit, int *target, int nq) {
         }
     }
 
-    const Gate *swp = CREATE_SWAP();
+    Gate *swp = CREATE_SWAP();
     for (int i = 0; i < nq / 2; i++) {
         int swap_targets[2] = {target[i], target[nq - i - 1]};
         applygate(swp, circuit, swap_targets);
@@ -48,13 +48,13 @@ void applyQFT(circuitt* circuit, int *target, int nq) {
 
 void applyiQFT(circuitt* circuit, int *target, int nq) {
 
-    const Gate *swp = CREATE_SWAP();
+    Gate *swp = CREATE_SWAP();
     for (int i = nq / 2 - 1; i >= 0; i--) {
         int swap_targets[2] = {target[i], target[nq - i - 1]};
         applygate(swp, circuit, swap_targets);
     }
     destroyGate(swp);
-    const Gate *hada = CREATE_HADAMARD();
+    Gate *hada = CREATE_HADAMARD();
     for (int i = nq - 1; i >= 0; i--) {
 
         for (int j = nq - 1; j > i; j--) {

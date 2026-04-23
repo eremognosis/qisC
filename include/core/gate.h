@@ -20,7 +20,8 @@ typedef struct {
 
 Gate *createGate(int n); //// oresents to I
 void destroyGate(Gate *gate);
-int setGate(Gate *gate, double complex *data);
+int setGate(Gate *gate, const double complex *data);
+int setGateTrusted(Gate *gate, const double complex *data);
 int applygate(const Gate *gate, circuitt *circuit, const int *target_qubits); /// wtf
 bool checkunitary(const Gate *gate, double epsilon);
 int makeunitary(Gate *gate);

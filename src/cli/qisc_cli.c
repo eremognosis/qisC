@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <time.h>
 static void print_usage(FILE *stream, const char *program) {
     fprintf(stream,
             "Usage:\n"
@@ -110,7 +110,6 @@ static int run_bell(void) {
     destroyGate(cnot);
     return result;
 }
-
 static int run_grover(int argc, char **argv) {
     if (argc < 4 || argc > 5) {
         print_usage(stderr, argv[0]);
@@ -137,6 +136,9 @@ static int run_grover(int argc, char **argv) {
         }
     }
 
+    // --- Start timing here ---
+    clock_t start_time = clock();
+
     circuitt *circuit = createcirc(n_qubits);
     if (!circuit) {
         print_last_error();
@@ -157,12 +159,17 @@ static int run_grover(int argc, char **argv) {
         return 1;
     }
 
+    // --- End timing here ---
+    clock_t end_time = clock();
+    double time_taken = (double)(end_time - start_time) / CLOCKS_PER_SEC;
+
     printf("Grover search\n");
     printf("  qubits: %d\n", n_qubits);
     printf("  marked state: %zu\n", marked_state);
     printf("  iterations: %d\n", resolved_iterations);
     printf("  most likely state: %zu\n", measured_state);
     printf("  probability: %.12f\n", probability);
+    printf("  execution time: %.3f seconds\n", time_taken); // The only line you actually care about
 
     if (circuit->dim <= 256) {
         printf("\nState vector:\n");
@@ -177,7 +184,6 @@ static int run_grover(int argc, char **argv) {
     destroycirc(circuit);
     return 0;
 }
-
 int main(int argc, char **argv) {
     if (argc < 2 || strcmp(argv[1], "--help") == 0 || strcmp(argv[1], "-h") == 0) {
         print_usage(argc < 2 ? stderr : stdout, argv[0]);
